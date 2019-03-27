@@ -1,7 +1,7 @@
 # 前端开发规范
 
 
-> 在多人协作的团队里，需要制定一套合理的规范，才会让开发更加方便、统一。这是我之前团队里制定的一个前端规范，现在跟大家分享一下，希望可以互相交流下。
+> 在多人协作的团队里，需要制定一套合理的规范，才会让开发更加方便、统一。
 
 [TOC]
 
@@ -57,7 +57,7 @@
 ```
 <!DOCTYPE html>
 <html>
-	...
+    ...
 </html>
 ```
 
@@ -68,7 +68,7 @@
 ```
 <!DOCTYPE html>
 <html lang="zh">
-	...
+    ...
 </html>
 ```
 
@@ -82,7 +82,7 @@
     <head>
         <meta charset="UTF-8">
     </head>
-	...
+    ...
 </html>
 ```
 
@@ -96,7 +96,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     </head>
-	...
+    ...
 </html>
 ```
 注：Edge 表示 IE 最新的版本模式，也可以等于 IE=9、IE=8 等。
@@ -111,7 +111,7 @@
 
 <!-- 文档中 CSS -->
 <style>
-	...
+    ...
 </style>
 
 <!-- 引入JS -->
@@ -119,7 +119,7 @@
 
 <!-- 文档中 JS -->
 <script>
-	...
+    ...
 </script>
 ```
 
@@ -206,6 +206,40 @@ id 更加具体且应该尽量少使用，所以将它放在第二位。
 }
 ```
 
+#### 4. SCSS相关
+
+```
+/* not good */
+@import "_dialog.scss";
+
+/* good */
+@import "dialog";
+
+/* not good */
+.fatal {
+    @extend .error;
+}
+
+/* good */
+.fatal {
+    @extend %error;
+}
+
+/* not good */
+.element {
+    & > .dialog {
+        ...
+    }
+}
+
+/* good */
+.element {
+    > .dialog {
+        ...
+    }
+}
+```
+
 ### 四、JavaScript
 
 #### 1. 命名
@@ -224,7 +258,7 @@ var _name = 'Jone';
 
 /* 构造函数 */
 function Person(name) {
-	this.name = name;
+    this.name = name;
 }
 
 /* jQuery对象 */
@@ -267,11 +301,41 @@ var $orderBox = $('body') ;
 * @param {number} time - 毫秒
 */
 function foo(type, time) {
-	...
+    ...
 }
 ```
 
-### 五、SEO优化
+#### 4. 缩进
+
+```
+var x = 1,
+    y = 1;
+
+if (x < y) {
+    x += 10;
+} else {
+    x += 1;
+}
+```
+
+#### 5. 分号
+
+```
+/* var declaration */
+var x = 1;
+
+/* expression statement */
+x++;
+
+/* do-while */
+do {
+    x++;
+} while (x < 10);
+```
+
+### 五、其他
+
+- SEO优化
 
 SEO（Search Engine Optimization）就是搜索引擎优化，是指为了增加网页在搜索引擎自然搜索结果中的收录数量以及提升排序位置而做的优化行为。
 
