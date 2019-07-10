@@ -1,9 +1,40 @@
+
+
 # 前端开发规范
 
 
 > 在多人协作的团队里，需要制定一套合理的规范，才会让开发更加方便、统一。
 
-[TOC]
+```
+一、命名规则
+    1. 项目命名
+    2. 目录命名
+    3. 文件命名
+二、HTML
+    1. HTML5 Doctype
+    2. lang 属性
+    3. 字符编码
+    4. IE 渲染模式
+    5. 引入 CSS、JS
+    6. 属性顺序
+三、CSS
+    1. 命名
+    2. 书写顺序
+    3. 颜色简写
+    4. SCSS相关
+四、JavaScript
+    1. 命名
+    2. 引号
+    3. 注释
+    4. 缩进
+    5. 分号
+五、Vue相关规范
+    1. 组件标签
+    2. *.vue文件规范
+        template
+        script
+六、结尾
+```
 
 ### 一、命名规则
 
@@ -11,14 +42,16 @@
 
 #### 1. 项目命名
 
-    tronker, soffice, app-tronker, app-soffice
+根据项目域名来创建项目，如下：
+ 
+    applease.zhaoliangji.com - 项目1
+    erpmarketing.zhaoliangji.com - 项目2
 
 #### 2. 目录命名
 
-    tronker, soffice, app-tronker, app-soffice
+    app, app-h5
 
 #### 3. 文件命名
-
 
 - css 文件
 
@@ -28,8 +61,8 @@
         
     自定义插件：
         
-        假设项目组 Tronker 使用 't-' 开头：t-form.css、t-page.css 等。
-        假设项目组 Sofiice 使用 's-' 开头：s-form.css、s-page.css 等。
+        假设项目组 w 使用 'w-' 开头：w-form.css、w-page.css 等。
+        假设项目组 b 使用 'b-' 开头：b-form.css、b-page.css 等。
 
 - js 文件
 
@@ -39,8 +72,8 @@
         
     自定义插件：
         
-        假设项目组 Tronker 使用 't-' 开头：t-form.js、t-page.js 等。
-        假设项目组 Tronker 使用 's-' 开头：s-form.js、s-page.js 等。
+        假设项目组 w 使用 'w-' 开头：w-form.js、w-page.js 等。
+        假设项目组 b 使用 'b-' 开头：b-form.js、b-page.js 等。
 
 - html 文件
 
@@ -239,6 +272,29 @@ id 更加具体且应该尽量少使用，所以将它放在第二位。
     }
 }
 ```
+嵌套方式
+```
+.v-btn{
+    display: inline-block;
+    padding: 6px 20px;
+    font-size: 14px;
+    line-height: 20px;
+    background: $defaultBg;
+    color: $defaultColor;
+    white-space: nowrap;
+    border-radius: 3px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    &-default{
+        @include button-define($defaultBg, 'btn');
+        &.is-border {
+            @include button-border-define($defaultBg, 'default');
+        }
+    }
+}
+```
 
 ### 四、JavaScript
 
@@ -295,17 +351,48 @@ var $orderBox = $('body') ;
 - 文档注释
 
 ```
-/** 
-* 一个带参数的函数 
-* @param {string}   type - 类型 
-* @param {number} time - 毫秒
-*/
-function foo(type, time) {
-    ...
+/**
+ * 倒计时
+ * @param el        - 元素
+ * @param seconds   - 秒数
+ * @param startText - 倒计时中文案
+ * @param endText   - 结束后文案
+ * @param callback  - 结束后回调方法
+ */
+function countDown(options) {
+    var vm = this;
+    var defaults = {
+        seconds: 60,
+        startText: '${seconds}s',
+        endText: '重发验证码',
+        callback: function () {
+        }
+    };
+    options = Object.assign({}, defaults, options);
+
+    if (!options.el) return;
+    if (vm.countDown.status) return;
+    vm.countDown.status = true;
+    options.el.innerHTML = options.startText.replace('${seconds}', options.seconds);
+
+    var time = null;
+    time = setInterval(function () {
+        options.seconds--;
+        if (!options.seconds) {
+            clearInterval(time);
+            options.el.innerHTML = defaults.endText;
+            vm.countDown.status = false;
+            options.callback ? options.callback() : '';
+            return;
+        }
+        options.el.innerHTML = options.startText.replace('${seconds}', options.seconds);
+    }, 1000);
 }
 ```
 
 #### 4. 缩进
+
+统一4个缩进
 
 ```
 var x = 1,
@@ -320,6 +407,8 @@ if (x < y) {
 
 #### 5. 分号
 
+每个语句后面必须加分号
+
 ```
 /* var declaration */
 var x = 1;
@@ -333,68 +422,41 @@ do {
 } while (x < 10);
 ```
 
-### 五、其他
+### 五、Vue相关规范
 
-- SEO优化
+#### 1. 组件标签
 
-SEO（Search Engine Optimization）就是搜索引擎优化，是指为了增加网页在搜索引擎自然搜索结果中的收录数量以及提升排序位置而做的优化行为。
+标签以 `-` 拼接命名，比如引入一个按钮：
+```
+<v-button>默认</v-button>
+<v-button type="primary">主要</v-button>
+```
 
-#### 1. HTML标签权重分值排列
+#### 2. *.vue文件规范
 
-- 内部链接文字：10分
-- 标题 title：10分
-- 域名：7分
-- H1，H2字号标题：5分
-- 每段首句：5分
-- 路径或文件名：4分
-- 相似度（关键词堆积）：4分
-- 每句开头：1.5分
-- 加粗或斜体：1分
-- 文本用法（内容）：1分
-- title 属性：1分 （注意不是<title>， 是title属性， 比如a href=… title=”）
-- alt 标记：0.5分
-- Meta 描述（Description 属性）：0.5分
-- Meta 关键词（Keywords 属性）：0.05分
+##### template
 
-#### 2. 优化方法
+属性最外层使用双引号，如：
 
-作为一名前端，我们不需要精通SEO，但我们需要去了解它。如何提升SEO的方法？
+```
+// good
+<div class="app-container">
 
-- 简化代码结构，更利于搜索引擎分析抓取有用内容
+// bad
+<div class='app-container'>
+```
+##### script
 
-页面尽量采用 DIV+CSS，当然，表格展现模式用 table 还是比 div 方便很多的；所有 js、css 采用外联方式，图片采用 css 精灵，减少请求次数。
+使用单引号，如：
 
-- 每个页面只能出现一次H1标签，H2 标签可以多次
+```
+// good
+import {Component, Vue} from 'vue-property-decorator';
 
-    H1 权重很高，普遍认为仅次于 title，一般资讯详情页的标题、商品详情页的标题，都放在 H1 里。
+// bad
+import {Component, Vue} from "vue-property-decorator";
+```
 
-- Meta标签的优化
-
-    Title：突出重点，不出现重复关键字，关键字排前，每个页面的 title 都要不同。
-    Description：把页面的内容概括在这里，长度要合理。
-    Keywords：列表出几个关键字即可。
-
-- 为图片添加 alt、title 描述
-
-    ```
-    <img src="images/logo.png" alt="logo" title="这是一个logo">
-    ```
-
-- 避免表格的嵌套
-
-- 采用 web 标准进行网站重构
-
-- FLASH 应用
-
-    FLASH 由于不含文字信息，应尽量用于功能展示和广告，少用于网站栏目和页面。
-
-- 尽少使用 iframe 框架
-
-    搜索引擎不会抓取到 iframe 里的内容，重要内容不要放在框架中。
-
-- 资讯的内部链接
-
-    有助提高网站排名和 PR 值，例如相关资讯、推荐资讯等。
     
 ### 六、结尾
 
